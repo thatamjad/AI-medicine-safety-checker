@@ -11,8 +11,29 @@ const logger = require('./utils/logger');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Security middleware with relaxed settings for Vercel
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  crossOriginOpenerPolicy: { policy: "unsafe-none" },
+  contentSecurityPolicy: false,
+})); require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+require('dotenv').config();
+
+const healthRoutes = require('./routes/health');
+const medicineRoutes = require('./routes/medicine');
+const logger = require('./utils/logger');
+
+const app = express();
+const PORT = process.env.PORT || 3001;
+
 // Security middleware
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: false,
+  crossOriginOpenerPolicy: false
+}));
 
 // Rate limiting
 const limiter = rateLimit({
@@ -120,11 +141,14 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-// Start server
-app.listen(PORT, () => {
-  logger.info(`🚀 AI Medicine Safety Checker API running on port ${PORT}`);
-  logger.info(`🌍 Environment: ${process.env.NODE_ENV}`);
-  logger.info(`🔗 CORS enabled for: ${process.env.CORS_ORIGIN}`);
-});
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    logger.info(`🚀 Server running on port ${PORT}`);
+    logger.info(`🌍 Environment: ${process.env.NODE_ENV}`);
+    logger.info(`🔗 CORS enabled for: ${process.env.CORS_ORIGIN}`);
+  });
+}
 
+// Export the Express API for Vercel
 module.exports = app;

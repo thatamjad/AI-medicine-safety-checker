@@ -33,9 +33,7 @@
     }
   ],
   "env": {
-    "NODE_ENV": "production"
-  }
-  "env": {
-    "VITE_API_BASE_URL": "https://your-railway-app.up.railway.app"
+    "NODE_ENV": "production",
+    "VITE_API_BASE_URL": "https://ai-medicine-safety-g0q3munl0-amjads-projects-b75044db.vercel.app"
   }
 }

@@ -5,11 +5,35 @@ yarn-debug.log*
 yarn-error.log*
 
 # Environment variables
+# Root level env files
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.env.production
+.env.railway
+.env.vercel
+
+# Backend env files
+backend/.env
+backend/.env.local
+backend/.env.development.local
+backend/.env.test.local
+backend/.env.production.local
+backend/.env.production
+backend/.env.railway
+backend/.env.vercel
+
+# Frontend env files
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/.env.production
+frontend/.env.railway
+frontend/.env.vercel
 
 # Build outputs
 dist/

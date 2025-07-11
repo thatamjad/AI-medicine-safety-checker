@@ -1,22 +1,7 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "backend/server.js",
-      "use": "@vercel/node",
-      "config": {
-        "buildCommand": "cd backend && git diff HEAD^ HEAD --quiet . || npm install"
-      }
-    },
-    {
-      "src": "frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist",
-        "buildCommand": "cd frontend && git diff HEAD^ HEAD --quiet . || (npm install && npm run build)"
-      }
-    }
-  ],
+  "buildCommand": "cd frontend && npm install && npm run build && cd ../backend && npm install",
+  "outputDirectory": "frontend/dist",
   "routes": [
     {
       "src": "/api/(.*)",

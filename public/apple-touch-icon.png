@@ -1,0 +1,16 @@
+<svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+  <!-- Medical background -->
+  <rect width="180" height="180" fill="#059669" rx="40"/>
+  
+  <!-- Medical cross -->
+  <rect x="72" y="30" width="36" height="120" fill="white" rx="12"/>
+  <rect x="30" y="72" width="120" height="36" fill="white" rx="12"/>
+  
+  <!-- Heart symbol -->
+  <path d="M90 140c-8-8-34-31-34-50 0-11 8-20 20-20 8 0 14 4 14 4s6-4 14-4c12 0 20 9 20 20 0 19-26 42-34 50z" 
+        fill="#dc2626" opacity="0.9"/>
+  
+  <!-- Small AI indicator -->
+  <circle cx="135" cy="45" r="12" fill="#3b82f6"/>
+  <text x="135" y="50" font-family="Arial, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="white">AI</text>
+</svg>

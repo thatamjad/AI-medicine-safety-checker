@@ -1,70 +1,85 @@
+import { Link } from 'react-router-dom'
+
 function About() {
   return (
-    <div className="about-page">
-      <div className="about-container">
-        <h2>About AI Medicine Safety Checker</h2>
-        
-        <div className="about-content">
-          <section className="about-section">
-            <h3>🎯 Our Mission</h3>
-            <p>
-              We provide AI-powered medication safety analysis with a special focus on 
-              women's and children's health. Our goal is to make important safety 
-              information more accessible while always encouraging consultation with 
-              healthcare professionals.
-            </p>
-          </section>
+    <div className="content-container">
+      {/* Page Header */}
+      <div className="page-header" style={{ marginBottom: 'var(--space-2xl)' }}>
+        <h1 className="serif-heading page-title">About MedSafe.</h1>
+        <p className="page-description">
+          AI-powered medication safety, built with care for everyone.
+        </p>
+      </div>
 
-          <section className="about-section">
-            <h3>🔬 What We Analyze</h3>
-            <ul>
-              <li><strong>Women's Health:</strong> Hormonal interactions, reproductive health impacts, and gender-specific considerations</li>
-              <li><strong>Pediatric Safety:</strong> Age-appropriate dosing, developmental considerations, and child-specific risks</li>
-              <li><strong>Pregnancy Safety:</strong> FDA categories, teratogenic risks, and breastfeeding considerations</li>
-              <li><strong>Clinical Trials:</strong> Information about drug testing in specific populations</li>
-            </ul>
-          </section>
+      <div className="features-grid">
+        <div className="bento-card" style={{ gridColumn: '1 / -1' }}>
+          <h3 className="serif-heading" style={{ fontSize: '1.75rem', marginBottom: 'var(--space-md)' }}>Our Mission</h3>
+          <p style={{ fontSize: '1.125rem', color: 'var(--text-secondary)' }}>
+            We provide AI-powered medication safety analysis with a special focus on
+            women's and children's health. Our goal is to make important safety
+            information more accessible while always encouraging consultation with
+            healthcare professionals.
+          </p>
+        </div>
 
-          <section className="about-section">
-            <h3>🤖 Technology</h3>
-            <p>
-              Our analysis is powered by Google's Gemini 2.5 Flash AI, which processes 
-              vast amounts of medical literature and safety data to provide comprehensive 
-              safety assessments. The AI is specifically trained to focus on gender and 
-              age-specific medical considerations.
-            </p>
-          </section>
+        <div className="bento-card">
+          <h3 className="serif-heading" style={{ fontSize: '1.5rem', marginBottom: 'var(--space-md)' }}>What We Analyze</h3>
+          <ul style={{ paddingLeft: 'var(--space-lg)', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+            <li><strong style={{ color: 'var(--text-primary)' }}>Women's Health:</strong> Hormonal interactions, reproductive health impacts</li>
+            <li><strong style={{ color: 'var(--text-primary)' }}>Pediatric Safety:</strong> Age-appropriate dosing, developmental considerations</li>
+            <li><strong style={{ color: 'var(--text-primary)' }}>Pregnancy Safety:</strong> FDA categories, teratogenic risks, breastfeeding</li>
+            <li><strong style={{ color: 'var(--text-primary)' }}>Drug Interactions:</strong> Multi-drug severity analysis</li>
+          </ul>
+        </div>
 
-          <section className="about-section">
-            <h3>⚠️ Important Limitations</h3>
-            <div className="warning-box">
-              <h4>This tool is for informational purposes only:</h4>
-              <ul>
-                <li>Not a substitute for professional medical advice</li>
-                <li>Does not replace medication packaging information</li>
-                <li>Should not be used for emergency medical decisions</li>
-                <li>Always consult healthcare providers for medical guidance</li>
-              </ul>
+        <div className="bento-card">
+          <h3 className="serif-heading" style={{ fontSize: '1.5rem', marginBottom: 'var(--space-md)' }}>Technology Stack</h3>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-sm)', marginBottom: 'var(--space-lg)' }}>
+            <span className="risk-badge" style={{ background: 'var(--bg-subtle)', color: 'var(--text-primary)', border: '1px solid var(--border-light)' }}>Perplexity AI</span>
+            <span className="risk-badge" style={{ background: 'var(--bg-subtle)', color: 'var(--text-primary)', border: '1px solid var(--border-light)' }}>Google Gemini</span>
+            <span className="risk-badge" style={{ background: 'var(--bg-subtle)', color: 'var(--text-primary)', border: '1px solid var(--border-light)' }}>React 18</span>
+            <span className="risk-badge" style={{ background: 'var(--bg-subtle)', color: 'var(--text-primary)', border: '1px solid var(--border-light)' }}>Node.js / Express</span>
+          </div>
+          <p style={{ color: 'var(--text-secondary)' }}>
+            Our analysis is powered by highly capable AI models with intelligent fallback,
+            ensuring reliable and up-to-date results.
+          </p>
+        </div>
+
+        <div className="bento-card" style={{ background: 'var(--color-warning-bg)', borderColor: 'rgba(217, 119, 6, 0.2)' }}>
+          <h3 className="serif-heading" style={{ fontSize: '1.5rem', marginBottom: 'var(--space-md)', color: 'var(--color-warning)' }}>Important Limitations</h3>
+          <ul style={{ paddingLeft: 'var(--space-lg)', color: 'var(--text-primary)', display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+            <li>Not a substitute for professional medical advice</li>
+            <li>Does not replace medication packaging information</li>
+            <li>Should not be used for emergency medical decisions</li>
+            <li>Always consult healthcare providers for medical guidance</li>
+          </ul>
+        </div>
+
+        <div className="bento-card" style={{ background: 'var(--color-danger-bg)', borderColor: 'rgba(225, 29, 72, 0.2)' }}>
+          <h3 className="serif-heading" style={{ fontSize: '1.5rem', marginBottom: 'var(--space-md)', color: 'var(--color-danger)' }}>Emergency Resources</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+            <div>
+              <strong style={{ color: 'var(--color-danger)', display: 'block', marginBottom: 'var(--space-xs)' }}>Medical Emergency:</strong>
+              <span style={{ color: 'var(--text-primary)' }}>Call 911 (US) or your local emergency number</span>
             </div>
-          </section>
-
-          <section className="about-section">
-            <h3>🛡️ Privacy & Safety</h3>
-            <p>
-              We do not store personal health information. All queries are processed 
-              securely and are not retained after analysis. We prioritize user privacy 
-              while providing valuable health insights.
-            </p>
-          </section>
-
-          <section className="about-section">
-            <h3>📞 Emergency Resources</h3>
-            <div className="emergency-info">
-              <p><strong>For medical emergencies:</strong> Call 911 (US) or your local emergency number</p>
-              <p><strong>Poison Control:</strong> 1-800-222-1222 (US)</p>
-              <p><strong>For medication questions:</strong> Consult your pharmacist or healthcare provider</p>
+            <div>
+              <strong style={{ color: 'var(--color-danger)', display: 'block', marginBottom: 'var(--space-xs)' }}>Poison Control:</strong>
+              <span style={{ color: 'var(--text-primary)' }}>1-800-222-1222 (US)</span>
             </div>
-          </section>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ textAlign: 'center', marginTop: 'var(--space-4xl)', paddingTop: 'var(--space-2xl)', borderTop: '1px solid var(--border-light)' }}>
+        <h3 className="serif-heading" style={{ fontSize: '2rem', marginBottom: 'var(--space-xl)' }}>Ready to get started?</h3>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 'var(--space-md)' }}>
+          <Link to="/analyze" className="btn-primary">
+            Analyze a Medicine
+          </Link>
+          <Link to="/interactions" className="btn-secondary">
+            Check Interactions
+          </Link>
         </div>
       </div>
     </div>

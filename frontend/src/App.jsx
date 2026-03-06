@@ -1,59 +1,29 @@
-import { useState } from 'react'
-import Home from './pages/Home'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { ThemeProvider } from './context/ThemeContext'
+import Layout from './components/Layout'
+import Landing from './pages/Landing'
+import Analysis from './pages/Analysis'
+import Interactions from './pages/Interactions'
+import Dashboard from './pages/Dashboard'
 import About from './pages/About'
-import AccessibilityEnhancements from './components/AccessibilityEnhancements'
+import './styles/main.css'
 import './styles/components.css'
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('home')
-
   return (
-    <AccessibilityEnhancements>
-      <div className="app">
-        <nav className="navbar" role="navigation" aria-label="Main navigation">
-          <div className="nav-container">
-            <div className="nav-brand">
-              <span className="brand-icon" aria-hidden="true">🏥</span>
-              <h1>AI Medicine Safety Checker</h1>
-            </div>
-            <div className="nav-links" role="tablist">
-              <button 
-                className={`nav-link ${currentPage === 'home' ? 'active' : ''}`}
-                onClick={() => setCurrentPage('home')}
-                role="tab"
-                aria-selected={currentPage === 'home'}
-                aria-controls="main-content"
-              >
-                Home
-              </button>
-              <button 
-                className={`nav-link ${currentPage === 'about' ? 'active' : ''}`}
-                onClick={() => setCurrentPage('about')}
-                role="tab"
-                aria-selected={currentPage === 'about'}
-                aria-controls="main-content"
-              >
-                About
-              </button>
-            </div>
-          </div>
-        </nav>
-
-        <main className="main-content" role="main">
-          {currentPage === 'home' && <Home />}
-          {currentPage === 'about' && <About />}
-        </main>
-
-        <footer className="footer" role="contentinfo">
-          <div className="footer-content">
-            <p>&copy; 2025 AI Medicine Safety Checker. For informational purposes only.</p>
-            <p className="footer-disclaimer">
-              Always consult with healthcare professionals before making medical decisions.
-            </p>
-          </div>
-        </footer>
-      </div>
-    </AccessibilityEnhancements>
+    <ThemeProvider>
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/analyze" element={<Analysis />} />
+            <Route path="/interactions" element={<Interactions />} />
+            <Route path="/history" element={<Dashboard />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </ThemeProvider>
   )
 }
 

@@ -1,240 +1,154 @@
 import ReactMarkdown from 'react-markdown'
-import ExportReport from './ExportReport'
+import { Link } from 'react-router-dom'
 
-function AdvancedSafetyReport({ result }) {
-  // Debug logging
-  console.log('AdvancedSafetyReport received result:', result);
-  
-  if (!result || !result.analysis) {
+function AdvancedSafetyReport({ report, medicineName, patientInfo }) {
+  if (!report) {
     return (
-      <div className="safety-report-container">
-        <div className="error-message">
-          <p>No analysis data available.</p>
-        </div>
+      <div className="bento-card" style={{ textAlign: 'center', padding: 'var(--space-3xl)' }}>
+        <p>No analysis data available.</p>
       </div>
     );
   }
-
-  const { medicine, analysis, patientInfo, timestamp } = result;
-  
-  const getRiskLevelColor = (riskLevel) => {
-    switch (riskLevel?.toLowerCase()) {
-      case 'high': return '#d32f2f'
-      case 'moderate': return '#f57c00'
-      case 'low-moderate': return '#ff9800'
-      case 'low': return '#388e3c'
-      default: return '#757575'
-    }
-  };
-
-  const getConfidenceBadgeColor = (confidence) => {
-    switch (confidence?.toLowerCase()) {
-      case 'high': return '#2e7d32'
-      case 'moderate': return '#f57c00'
-      case 'low': return '#d32f2f'
-      default: return '#757575'
-    }
-  };
 
   const formatTimestamp = (timestamp) => {
     return new Date(timestamp).toLocaleString()
   };
 
   return (
-    <div className="advanced-safety-report" style={{ 
-      background: '#fff', 
-      borderRadius: '8px', 
-      boxShadow: '0 4px 12px rgba(0,0,0,0.1)', 
-      overflow: 'hidden', 
-      margin: '2rem 0' 
-    }}>
-      {/* Header */}
-      <div style={{ 
-        background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)', 
-        color: 'white', 
-        padding: '2rem', 
-        textAlign: 'center' 
-      }}>
-        <h2 style={{ margin: '0 0 0.5rem 0', fontSize: '1.5rem', fontWeight: '600' }}>
-          Comprehensive Safety Analysis
-        </h2>
-        <div style={{ fontSize: '1.1rem', opacity: '0.9' }}>
-          {medicine}
-          {analysis.medicineNames && analysis.medicineNames.wasResolved && (
-            <span style={{ fontSize: '0.9rem', opacity: '0.8', display: 'block', marginTop: '0.5rem' }}>
-              ({analysis.medicineNames.resolved})
-            </span>
-          )}
-        </div>
-        
-        <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <span style={{ 
-            backgroundColor: getRiskLevelColor(analysis.riskLevel), 
-            padding: '0.25rem 0.75rem', 
-            borderRadius: '1rem', 
-            fontSize: '0.875rem',
-            fontWeight: '500'
-          }}>
-            Risk: {analysis.riskLevel || 'Unknown'}
+    <div className="report-document">
+      <div className="report-header">
+        <div className="report-title-meta">Safety Analysis Report</div>
+        <h2 className="serif-heading" style={{ fontSize: '2.5rem' }}>{medicineName}</h2>
+
+        <div style={{ marginTop: 'var(--space-lg)', display: 'flex', gap: 'var(--space-sm)', justifyContent: 'center' }}>
+          <span className={`risk-badge risk-${report.riskLevel?.toLowerCase() || 'unknown'}`}>
+            Risk: {report.riskLevel || 'Unknown'}
           </span>
-          <span style={{ 
-            backgroundColor: getConfidenceBadgeColor(analysis.confidenceLevel), 
-            padding: '0.25rem 0.75rem', 
-            borderRadius: '1rem', 
-            fontSize: '0.875rem',
-            fontWeight: '500'
-          }}>
-            Confidence: {analysis.confidenceLevel || 'Moderate'}
+          <span className="risk-badge" style={{ background: 'var(--bg-subtle)', color: 'var(--text-primary)', border: '1px solid var(--border-light)' }}>
+            Confidence: {report.confidenceLevel || 'Moderate'}
           </span>
         </div>
       </div>
 
-      <div style={{ padding: '2rem' }}>
+      <div className="report-body">
         {/* Executive Summary */}
-        {analysis.summary && (
-          <div style={{ marginBottom: '2rem', padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '6px' }}>
-            <h3 style={{ margin: '0 0 1rem 0', color: '#1e293b', fontSize: '1.1rem' }}>📋 Executive Summary</h3>
-            <div style={{ lineHeight: '1.6' }}>
-              <ReactMarkdown>{analysis.summary}</ReactMarkdown>
+        {report.summary && (
+          <div className="report-section">
+            <h3>Summary</h3>
+            <div className="report-section-content">
+              <ReactMarkdown>{report.summary}</ReactMarkdown>
             </div>
           </div>
         )}
 
-        {/* Primary Safety Sections */}
-        <div style={{ display: 'grid', gap: '1.5rem', marginBottom: '2rem' }}>
-          <div style={{ border: '1px solid #e2e8f0', borderRadius: '6px', padding: '1.5rem' }}>
-            <h4 style={{ margin: '0 0 1rem 0', color: '#db2777', fontSize: '1rem', fontWeight: '600' }}>
-              👩 Women's Health Safety
+        <div className="features-grid" style={{ marginBottom: 'var(--space-2xl)' }}>
+          {/* Primary Safety Sections */}
+          <div className="bento-card">
+            <h4 style={{ color: 'var(--text-primary)', fontVariant: 'small-caps', letterSpacing: '0.05em', marginBottom: 'var(--space-sm)' }}>
+              Women's Health
             </h4>
-            <div style={{ lineHeight: '1.6' }}>
-              <ReactMarkdown>{analysis.womensSafety}</ReactMarkdown>
+            <div className="report-section-content" style={{ fontSize: '0.9375rem' }}>
+              <ReactMarkdown>{report.womensSafety}</ReactMarkdown>
             </div>
           </div>
 
-          <div style={{ border: '1px solid #e2e8f0', borderRadius: '6px', padding: '1.5rem' }}>
-            <h4 style={{ margin: '0 0 1rem 0', color: '#059669', fontSize: '1rem', fontWeight: '600' }}>
-              👶 Pediatric Safety
+          <div className="bento-card">
+            <h4 style={{ color: 'var(--text-primary)', fontVariant: 'small-caps', letterSpacing: '0.05em', marginBottom: 'var(--space-sm)' }}>
+              Pediatric Safety
             </h4>
-            <div style={{ lineHeight: '1.6' }}>
-              <ReactMarkdown>{analysis.pediatricSafety}</ReactMarkdown>
+            <div className="report-section-content" style={{ fontSize: '0.9375rem' }}>
+              <ReactMarkdown>{report.pediatricSafety}</ReactMarkdown>
             </div>
           </div>
 
-          <div style={{ border: '1px solid #e2e8f0', borderRadius: '6px', padding: '1.5rem' }}>
-            <h4 style={{ margin: '0 0 1rem 0', color: '#7c3aed', fontSize: '1rem', fontWeight: '600' }}>
-              🤱 Pregnancy & Lactation
+          <div className="bento-card" style={{ gridColumn: '1 / -1' }}>
+            <h4 style={{ color: 'var(--text-primary)', fontVariant: 'small-caps', letterSpacing: '0.05em', marginBottom: 'var(--space-sm)' }}>
+              Pregnancy & Lactation
             </h4>
-            <div style={{ lineHeight: '1.6' }}>
-              <ReactMarkdown>{analysis.pregnancySafety}</ReactMarkdown>
+            <div className="report-section-content" style={{ fontSize: '0.9375rem' }}>
+              <ReactMarkdown>{report.pregnancySafety}</ReactMarkdown>
             </div>
           </div>
         </div>
 
         {/* Side Effects */}
-        {analysis.sideEffects && typeof analysis.sideEffects === 'object' && (
-          <div style={{ marginBottom: '2rem', border: '1px solid #e2e8f0', borderRadius: '6px', padding: '1.5rem' }}>
-            <h3 style={{ margin: '0 0 1rem 0', color: '#dc2626', fontSize: '1.1rem' }}>⚠️ Side Effect Profile</h3>
-            
-            {analysis.sideEffects.summary && (
-              <div style={{ marginBottom: '1rem', fontStyle: 'italic', color: '#6b7280' }}>
-                {analysis.sideEffects.summary}
+        {report.sideEffects && typeof report.sideEffects === 'object' && (
+          <div className="report-section">
+            <h3>Side Effect Profile</h3>
+            <div className="report-section-content">
+              {report.sideEffects.summary && (
+                <p style={{ fontStyle: 'italic', marginBottom: 'var(--space-md)' }}>
+                  {report.sideEffects.summary}
+                </p>
+              )}
+
+              <div style={{ display: 'grid', gap: 'var(--space-xl)', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
+                {report.sideEffects.common && report.sideEffects.common.length > 0 && (
+                  <div>
+                    <h5 style={{ color: 'var(--text-primary)', marginBottom: 'var(--space-xs)' }}>Common</h5>
+                    <ul style={{ margin: '0', paddingLeft: 'var(--space-lg)' }}>
+                      {report.sideEffects.common.map((effect, index) => (
+                        <li key={index}>{effect}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {report.sideEffects.serious && report.sideEffects.serious.length > 0 && (
+                  <div>
+                    <h5 style={{ color: 'var(--color-danger)', marginBottom: 'var(--space-xs)' }}>Serious</h5>
+                    <ul style={{ margin: '0', paddingLeft: 'var(--space-lg)' }}>
+                      {report.sideEffects.serious.map((effect, index) => (
+                        <li key={index}>{effect}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
-            )}
-            
-            <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
-              {analysis.sideEffects.common && analysis.sideEffects.common.length > 0 && (
-                <div>
-                  <h5 style={{ margin: '0 0 0.5rem 0', color: '#f59e0b', fontSize: '0.9rem' }}>Common (≥1%)</h5>
-                  <ul style={{ margin: '0', paddingLeft: '1.2rem', fontSize: '0.875rem' }}>
-                    {analysis.sideEffects.common.map((effect, index) => (
-                      <li key={index}>{effect}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              
-              {analysis.sideEffects.serious && analysis.sideEffects.serious.length > 0 && (
-                <div>
-                  <h5 style={{ margin: '0 0 0.5rem 0', color: '#dc2626', fontSize: '0.9rem' }}>Serious/Severe</h5>
-                  <ul style={{ margin: '0', paddingLeft: '1.2rem', fontSize: '0.875rem' }}>
-                    {analysis.sideEffects.serious.map((effect, index) => (
-                      <li key={index}>{effect}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              
-              {analysis.sideEffects.genderSpecific && analysis.sideEffects.genderSpecific.length > 0 && (
-                <div>
-                  <h5 style={{ margin: '0 0 0.5rem 0', color: '#db2777', fontSize: '0.9rem' }}>Gender-Specific</h5>
-                  <ul style={{ margin: '0', paddingLeft: '1.2rem', fontSize: '0.875rem' }}>
-                    {analysis.sideEffects.genderSpecific.map((effect, index) => (
-                      <li key={index}>{effect}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
             </div>
           </div>
         )}
 
-        {/* Additional Safety Information */}
-        <div style={{ display: 'grid', gap: '1.5rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', marginBottom: '2rem' }}>
-          <div style={{ border: '1px solid #e2e8f0', borderRadius: '6px', padding: '1.5rem' }}>
-            <h4 style={{ margin: '0 0 1rem 0', color: '#dc2626', fontSize: '1rem' }}>🚫 Contraindications</h4>
-            <div style={{ lineHeight: '1.6', fontSize: '0.875rem' }}>
-              <ReactMarkdown>{analysis.contraindications}</ReactMarkdown>
+        {/* Detailed Sections Grid */}
+        <div style={{ display: 'grid', gap: 'var(--space-lg)', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', marginBottom: 'var(--space-2xl)' }}>
+          <div className="bento-card">
+            <h4 style={{ color: 'var(--color-danger)', marginBottom: 'var(--space-sm)' }}>Contraindications</h4>
+            <div className="report-section-content" style={{ fontSize: '0.875rem' }}>
+              <ReactMarkdown>{report.contraindications}</ReactMarkdown>
             </div>
           </div>
-          
-          <div style={{ border: '1px solid #e2e8f0', borderRadius: '6px', padding: '1.5rem' }}>
-            <h4 style={{ margin: '0 0 1rem 0', color: '#2563eb', fontSize: '1rem' }}>💊 Dosing Guidelines</h4>
-            <div style={{ lineHeight: '1.6', fontSize: '0.875rem' }}>
-              <ReactMarkdown>{analysis.dosing}</ReactMarkdown>
+
+          <div className="bento-card">
+            <h4 style={{ color: 'var(--accent-base)', marginBottom: 'var(--space-sm)' }}>Dosing Guidelines</h4>
+            <div className="report-section-content" style={{ fontSize: '0.875rem' }}>
+              <ReactMarkdown>{report.dosing}</ReactMarkdown>
             </div>
           </div>
-          
-          <div style={{ border: '1px solid #e2e8f0', borderRadius: '6px', padding: '1.5rem' }}>
-            <h4 style={{ margin: '0 0 1rem 0', color: '#7c3aed', fontSize: '1rem' }}>🔄 Drug Interactions</h4>
-            <div style={{ lineHeight: '1.6', fontSize: '0.875rem' }}>
-              <ReactMarkdown>{analysis.interactions}</ReactMarkdown>
-            </div>
-          </div>
-          
-          <div style={{ border: '1px solid #e2e8f0', borderRadius: '6px', padding: '1.5rem' }}>
-            <h4 style={{ margin: '0 0 1rem 0', color: '#059669', fontSize: '1rem' }}>📊 Monitoring Requirements</h4>
-            <div style={{ lineHeight: '1.6', fontSize: '0.875rem' }}>
-              <ReactMarkdown>{analysis.monitoring}</ReactMarkdown>
+
+          <div className="bento-card">
+            <h4 style={{ color: 'var(--text-primary)', marginBottom: 'var(--space-sm)' }}>Monitoring</h4>
+            <div className="report-section-content" style={{ fontSize: '0.875rem' }}>
+              <ReactMarkdown>{report.monitoring}</ReactMarkdown>
             </div>
           </div>
         </div>
 
         {/* Clinical Trials */}
-        <div style={{ marginBottom: '2rem', border: '1px solid #e2e8f0', borderRadius: '6px', padding: '1.5rem' }}>
-          <h3 style={{ margin: '0 0 1rem 0', color: '#1e293b', fontSize: '1.1rem' }}>🔬 Clinical Evidence & Trials</h3>
-          <div style={{ lineHeight: '1.6' }}>
-            <ReactMarkdown>{analysis.clinicalTrials}</ReactMarkdown>
+        <div className="report-section">
+          <h3>Evidence Base</h3>
+          <div className="report-section-content">
+            <ReactMarkdown>{report.clinicalTrials}</ReactMarkdown>
           </div>
         </div>
 
         {/* Disclaimer */}
-        <div style={{ 
-          backgroundColor: '#fef3c7', 
-          border: '1px solid #f59e0b', 
-          borderRadius: '6px', 
-          padding: '1.5rem',
-          marginTop: '2rem'
-        }}>
-          <h4 style={{ margin: '0 0 1rem 0', color: '#92400e', fontSize: '1rem' }}>⚠️ Medical Disclaimer</h4>
-          <p style={{ margin: '0', fontSize: '0.875rem', lineHeight: '1.6', color: '#92400e' }}>
-            This AI-generated analysis is for <strong>educational purposes only</strong> and 
-            must not replace professional medical advice, diagnosis, or treatment. Always consult 
+        <div className="medical-disclaimer" style={{ marginTop: 'var(--space-3xl)' }}>
+          <h4 style={{ color: 'var(--color-warning)', marginBottom: 'var(--space-sm)', fontSize: '1rem', fontWeight: '600' }}>Medical Disclaimer</h4>
+          <p style={{ margin: '0', fontSize: '0.875rem', color: 'var(--text-primary)' }}>
+            This AI-generated analysis is for educational purposes only and
+            must not replace professional medical advice, diagnosis, or treatment. Always consult
             qualified healthcare providers for medical decisions.
           </p>
-          <div style={{ marginTop: '1rem', fontSize: '0.75rem', color: '#92400e' }}>
-            <strong>Analysis Generated:</strong> {formatTimestamp(timestamp)} | 
-            <strong> AI Model:</strong> Google Gemini
-          </div>
         </div>
       </div>
     </div>

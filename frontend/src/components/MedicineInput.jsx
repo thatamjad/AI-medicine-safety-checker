@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { analyzeMedicine } from '../services/api'
-import { 
-  validateForm, 
-  ValidationDebouncer, 
+import {
+  validateForm,
+  ValidationDebouncer,
   sanitizeFormData,
-  getFieldAriaAttributes 
+  getFieldAriaAttributes
 } from '../utils/validation'
 import MedicineSearchInput from './MedicineSearchInput'
 
@@ -16,11 +16,11 @@ function MedicineInput({ onAnalysisStart, onAnalysisComplete, onAnalysisError })
     isPregnant: false,
     isChild: false
   })
-  
+
   const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [fieldTouched, setFieldTouched] = useState({})
-  
+
   const validationDebouncer = useRef(new ValidationDebouncer(500))
 
   // Cleanup debouncer on unmount
@@ -33,7 +33,7 @@ function MedicineInput({ onAnalysisStart, onAnalysisComplete, onAnalysisError })
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
     const newValue = type === 'checkbox' ? checked : value
-    
+
     setFormData(prev => ({
       ...prev,
       [name]: newValue
@@ -75,7 +75,7 @@ function MedicineInput({ onAnalysisStart, onAnalysisComplete, onAnalysisError })
       ...prev,
       medicineName: selectedValue
     }))
-    
+
     // Clear any validation errors for medicine name
     setErrors(prev => ({
       ...prev,
@@ -85,7 +85,7 @@ function MedicineInput({ onAnalysisStart, onAnalysisComplete, onAnalysisError })
 
   const handleFieldBlur = (fieldName) => {
     setFieldTouched(prev => ({ ...prev, [fieldName]: true }))
-    
+
     // Validate on blur
     const validation = validateForm({ ...formData, [fieldName]: formData[fieldName] })
     if (validation.errors[fieldName]) {
@@ -98,7 +98,7 @@ function MedicineInput({ onAnalysisStart, onAnalysisComplete, onAnalysisError })
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
+
     // Mark all fields as touched for validation display
     const allFieldsTouched = Object.keys(formData).reduce((acc, key) => {
       acc[key] = true
@@ -113,7 +113,7 @@ function MedicineInput({ onAnalysisStart, onAnalysisComplete, onAnalysisError })
     if (!validation.isValid) {
       const firstErrorField = Object.keys(validation.errors)[0]
       onAnalysisError(`Please fix the following error: ${validation.errors[firstErrorField]}`)
-      
+
       // Focus on first error field
       setTimeout(() => {
         const errorElement = document.querySelector(`[name="${firstErrorField}"]`)
@@ -128,7 +128,7 @@ function MedicineInput({ onAnalysisStart, onAnalysisComplete, onAnalysisError })
     try {
       // Sanitize and prepare form data
       const sanitizedData = sanitizeFormData(formData)
-      
+
       // Prepare patient info
       const patientInfo = {
         ...(sanitizedData.age && { age: sanitizedData.age }),
@@ -141,7 +141,7 @@ function MedicineInput({ onAnalysisStart, onAnalysisComplete, onAnalysisError })
       const result = await analyzeMedicine(sanitizedData.medicineName, patientInfo)
       console.log('MedicineInput: API call successful, result:', result);
       onAnalysisComplete(result)
-      
+
       // Clear form errors on successful submission
       setErrors({})
     } catch (error) {
@@ -162,27 +162,20 @@ function MedicineInput({ onAnalysisStart, onAnalysisComplete, onAnalysisError })
     })
     setErrors({})
     setFieldTouched({})
-    setSuggestions([])
-    setShowSuggestions(false)
-    
-    // Focus on medicine name input after reset
-    setTimeout(() => {
-      medicineInputRef.current?.focus()
-    }, 100)
   }
 
   return (
     <div className="medicine-input-container">
       <div className="input-card">
         <h3>Enter Medicine Information</h3>
-        
+
         <form onSubmit={handleSubmit} className="medicine-form" noValidate>
           <div className="form-group medicine-group">
             <label htmlFor="medicineName" className="form-label">
               <span>Medicine Name *</span>
               <span className="label-tip">Enter brand name or generic name</span>
             </label>
-            
+
             <MedicineSearchInput
               value={formData.medicineName}
               onChange={handleMedicineNameChange}
@@ -190,14 +183,14 @@ function MedicineInput({ onAnalysisStart, onAnalysisComplete, onAnalysisError })
               placeholder="e.g., Dolo, Pantop D, Crocin, Paracetamol, Ibuprofen"
               disabled={isSubmitting}
             />
-            
+
             {errors.medicineName && (
               <div id="medicineName-error" className="form-error" role="alert">
                 <span aria-hidden="true">⚠️</span>
                 {errors.medicineName}
               </div>
             )}
-            
+
             <div className="medicine-tips">
               <h4>💡 Tip: You can search using common names</h4>
               <div className="medicine-examples">
@@ -304,7 +297,7 @@ function MedicineInput({ onAnalysisStart, onAnalysisComplete, onAnalysisError })
                 Check this for pediatric safety information
               </small>
             </div>
-            
+
             {(errors.isPregnant || errors.isChild) && (
               <div className="form-error" role="alert">
                 <span aria-hidden="true">⚠️</span>
@@ -347,7 +340,7 @@ function MedicineInput({ onAnalysisStart, onAnalysisComplete, onAnalysisError })
 
         <div className="input-disclaimer">
           <p>
-            💡 <strong>Tip:</strong> Providing age and gender helps us give more 
+            💡 <strong>Tip:</strong> Providing age and gender helps us give more
             specific safety information relevant to your situation.
           </p>
         </div>

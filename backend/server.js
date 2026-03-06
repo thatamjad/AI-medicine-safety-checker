@@ -11,34 +11,17 @@ const logger = require('./utils/logger');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Security middleware with relaxed settings for Vercel
+// Security middleware
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" },
   crossOriginOpenerPolicy: { policy: "unsafe-none" },
   contentSecurityPolicy: false,
-})); require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-require('dotenv').config();
-
-const healthRoutes = require('./routes/health');
-const medicineRoutes = require('./routes/medicine');
-const logger = require('./utils/logger');
-
-const app = express();
-const PORT = process.env.PORT || 3001;
-
-// Security middleware
-app.use(helmet({
-  crossOriginResourcePolicy: false,
-  crossOriginOpenerPolicy: false
 }));
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: (process.env.RATE_LIMIT_WINDOW || 15) * 60 * 1000, // 15 minutes
-  max: process.env.RATE_LIMIT_MAX || 100, // limit each IP to 100 requests per windowMs
+  windowMs: (process.env.RATE_LIMIT_WINDOW || 15) * 60 * 1000,
+  max: process.env.RATE_LIMIT_MAX || 100,
   message: {
     error: 'Too many requests from this IP, please try again later.',
     retryAfter: '15 minutes'
@@ -57,10 +40,9 @@ const corsOptions = {
       'http://localhost:5174',
       'http://127.0.0.1:5173',
       'http://127.0.0.1:5174',
-      process.env.CORS_ORIGIN // Production frontend URL
-    ].filter(Boolean); // Remove undefined values
+      process.env.CORS_ORIGIN
+    ].filter(Boolean);
     
-    // Allow requests with no origin (mobile apps, etc.)
     if (!origin) return callback(null, true);
     
     if (allowedOrigins.includes(origin)) {
@@ -94,7 +76,7 @@ app.use('/api/medicine', medicineRoutes);
 app.get('/', (req, res) => {
   res.json({
     message: 'AI Medicine Safety Checker API',
-    version: '1.0.0',
+    version: '2.0.0',
     status: 'running',
     endpoints: {
       health: '/api/health',

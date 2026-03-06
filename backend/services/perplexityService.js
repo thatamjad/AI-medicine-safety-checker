@@ -4,7 +4,9 @@ const logger = require('../utils/logger');
 class PerplexityService {
   constructor() {
     if (!process.env.PERPLEXITY_API_KEY) {
-      throw new Error('PERPLEXITY_API_KEY environment variable is required');
+      logger.warn('PERPLEXITY_API_KEY not set - Perplexity service disabled');
+      this.disabled = true;
+      return;
     }
     
     this.apiKey = process.env.PERPLEXITY_API_KEY;
@@ -41,6 +43,9 @@ class PerplexityService {
   }
 
   async generateContent(prompt) {
+    if (this.disabled) {
+      throw new Error('Perplexity service is not configured (PERPLEXITY_API_KEY missing)');
+    }
     try {
       logger.info('Sending request to Perplexity API');
       

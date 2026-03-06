@@ -4,7 +4,9 @@ const logger = require('../utils/logger');
 class GeminiService {
   constructor() {
     if (!process.env.GEMINI_API_KEY) {
-      throw new Error('GEMINI_API_KEY environment variable is required');
+      logger.warn('GEMINI_API_KEY not set - Gemini service disabled');
+      this.disabled = true;
+      return;
     }
     
     this.genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -24,6 +26,9 @@ class GeminiService {
   }
 
   async generateContent(prompt) {
+    if (this.disabled) {
+      throw new Error('Gemini service is not configured (GEMINI_API_KEY missing)');
+    }
     try {
       logger.info('Sending request to Gemini API');
       

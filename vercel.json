@@ -1,24 +1,29 @@
 {
   "version": 2,
-  "buildCommand": "cd frontend && npm install --include=dev && npm run build && cd ../backend && npm install",
-  "outputDirectory": "frontend/dist",
+  "builds": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    },
+    {
+      "src": "backend/api/index.js",
+      "use": "@vercel/node"
+    }
+  ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/backend/server.js"
+      "dest": "/backend/api/index.js"
     },
     {
       "src": "/(.*)",
-      "dest": "/frontend/dist/$1",
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type"
-      }
+      "dest": "/frontend/dist/$1"
     }
   ],
   "env": {
-    "NODE_ENV": "production",
-    "VITE_API_BASE_URL": "https://ai-medicine-safety-g0q3munl0-amjads-projects-b75044db.vercel.app"
+    "NODE_ENV": "production"
   }
 }

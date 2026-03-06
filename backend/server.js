@@ -35,17 +35,21 @@ app.use(limiter);
 // CORS configuration
 const corsOptions = {
   origin: function (origin, callback) {
+    // Allow requests with no origin (server-to-server, Vercel serverless)
+    if (!origin) return callback(null, true);
+
     const allowedOrigins = [
-      'http://localhost:5173', 
+      'http://localhost:5173',
       'http://localhost:5174',
       'http://127.0.0.1:5173',
       'http://127.0.0.1:5174',
       process.env.CORS_ORIGIN
     ].filter(Boolean);
-    
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.includes(origin)) {
+
+    // Allow any vercel.app subdomain (covers all preview + production deployments)
+    const isVercel = /\.vercel\.app$/.test(origin);
+
+    if (isVercel || allowedOrigins.includes(origin)) {
       return callback(null, true);
     } else {
       return callback(new Error('Not allowed by CORS'));
@@ -88,16 +92,16 @@ app.get('/', (req, res) => {
 // Error handling middleware
 app.use((err, req, res, next) => {
   logger.error(`Error: ${err.message}`, { stack: err.stack, url: req.url, method: req.method });
-  
+
   if (err.type === 'entity.parse.failed') {
     return res.status(400).json({
       error: 'Invalid JSON format in request body'
     });
   }
-  
+
   res.status(err.status || 500).json({
-    error: process.env.NODE_ENV === 'production' 
-      ? 'Internal server error' 
+    error: process.env.NODE_ENV === 'production'
+      ? 'Internal server error'
       : err.message,
     ...(process.env.NODE_ENV !== 'production' && { stack: err.stack })
   });
